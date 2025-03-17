@@ -53,6 +53,15 @@ def saque(saldo, extrato, valor_saque, numero_saques):
     return numero_saques, saldo, extrato
         
 
+def mostrar_extrato(extrato, saldo):
+    msg = "EXTRATO"
+    print(msg.center(34, '='))
+    if not extrato:
+        print("Não foram realizadas movimentações na conta!")
+    else:
+        print(extrato)
+        print(f"\nSaldo: R${saldo:.2f}")
+
 while True:
 
     opcao = input(menu)
@@ -68,7 +77,9 @@ while True:
         numero_saques, saldo, extrato = saque(numero_saques=numero_saques, saldo=saldo, extrato=extrato, valor_saque=valor_saque)
     
     elif opcao.lower() == "e":
-        print("Extrato")
+        print("EXTRATO:")
+        mostrar_extrato(extrato=extrato, saldo=saldo)
+
 
     elif opcao.lower() == "q":
         print("Saindo...")
