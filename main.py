@@ -1,3 +1,13 @@
+inicio = """
+
+    Seja Bem Vindo ao Gerbi Bank!
+
+    [1] Entrar
+    [2] Cadastrar
+    [0] Cancelar
+
+"""
+
 menu = """
 
 [d] Depositar
@@ -62,28 +72,45 @@ def mostrar_extrato(extrato, saldo):
         print(extrato)
         print(f"\nSaldo: R${saldo:.2f}")
 
+
 while True:
+    escolha_inicio = input(inicio)
 
-    opcao = input(menu)
+    if escolha_inicio == "1":
+        print("Login")
+        while True:
 
-    if opcao.lower() == "d":
-        print("DEPÓSITO:")
-        valor_deposito = float(input("Valor do depósito: "))
-        saldo, extrato = deposito(saldo=saldo, extrato=extrato, valor_deposito=valor_deposito)
-    
-    elif opcao.lower() == "s":
-        print("SAQUE:")
-        valor_saque = float(input("Valor do saque: "))
-        numero_saques, saldo, extrato = saque(numero_saques=numero_saques, saldo=saldo, extrato=extrato, valor_saque=valor_saque)
-    
-    elif opcao.lower() == "e":
-        print("EXTRATO:")
-        mostrar_extrato(extrato=extrato, saldo=saldo)
+            opcao = input(menu)
+
+            if opcao.lower() == "d":
+                print("DEPÓSITO:")
+                valor_deposito = float(input("Valor do depósito: "))
+                saldo, extrato = deposito(saldo=saldo, extrato=extrato, valor_deposito=valor_deposito)
+            
+            elif opcao.lower() == "s":
+                print("SAQUE:")
+                valor_saque = float(input("Valor do saque: "))
+                numero_saques, saldo, extrato = saque(numero_saques=numero_saques, saldo=saldo, extrato=extrato, valor_saque=valor_saque)
+            
+            elif opcao.lower() == "e":
+                print("EXTRATO:")
+                mostrar_extrato(extrato=extrato, saldo=saldo)
 
 
-    elif opcao.lower() == "q":
-        print("Saindo...")
+            elif opcao.lower() == "q":
+                print("Saindo...")
+                break
+
+            else:
+                print("Operação inválida. Selecione novamente")
+
+
+    elif escolha_inicio == "2":
+        print("Cadastrar")
+
+    elif escolha_inicio == "0":
+        print("Cancelando...")
         break
 
     else:
-        print("Operação inválida. Selecione novamente")
+        print("Valor Inválido!")
