@@ -1,3 +1,5 @@
+from datetime import datetime
+
 inicio = """
 
     Seja Bem Vindo ao Gerbi Bank!
@@ -17,11 +19,67 @@ menu = """
 
 => """
 
+
+
+clientes = {}
 saldo = 0
 limite = 500
 extrato = ""
 numero_saques = 0
 LIMITE_SAQUES = 3
+
+def cadastrar_cliente(clientes):
+
+    print("Cadastrar Cliente:")
+    nome_cliente = input("Nome do cliente: ")
+
+    while True:
+        try:
+            data_nasc_cliente = input("Data de nascimento (DD/MM/AAAA): ")
+            data_nasc_cliente = datetime.strptime(data_nasc_cliente, "%d/%m/%Y").date()
+            break 
+        except ValueError:
+            print("Formato inválido! Digite a data no formato correto (DD/MM/AAAA).")
+
+    while True:        
+        cpf_cliente = int(input("Insira seu CPF (Apenas Números) "))
+        if len(str(cpf_cliente)) == 11:
+            if cpf_cliente in clientes:
+                print("CPF já cadastrado! Tente novamente.")
+            else:
+                break
+        else:
+            print("CPF inválido! Digite apenas números com 11 dígitos.")
+
+    print("\n Informações de Endereço: ")
+    rua_cliente = input("Rua: ")
+    numero_cliente = int(input("Número: "))
+    bairro_cliente = input("Bairro: ")
+    cidade_cliente = input("Cidade: ")
+    while True:
+        estado_cliente = input("Sigla do Estado: ")
+        if len(estado_cliente) == 2:
+            break
+        else:
+            print("Valor inválido, apenas siglas são permitidas")
+
+    clientes[cpf_cliente] = {
+        "nome_cliente": nome_cliente,
+        "data_nasc_cliente": data_nasc_cliente,
+        "saldo": 0,
+        "extrato": "",
+        "numero_saques": 0,
+        "endereco_cliente": {
+            "rua_cliente": rua_cliente,
+            "numero_cliente": numero_cliente,
+            "bairro_cliente": bairro_cliente,
+            "cidade_cliente": cidade_cliente,
+            "estado_cliente": estado_cliente,
+        }
+    }
+
+    print(f"\n Cliente {nome_cliente} cadastrado com sucesso!")
+
 
 def deposito(saldo, extrato, valor_deposito):
 
@@ -106,7 +164,7 @@ while True:
 
 
     elif escolha_inicio == "2":
-        print("Cadastrar")
+        cadastrar_cliente(clientes= clientes)
 
     elif escolha_inicio == "0":
         print("Cancelando...")
