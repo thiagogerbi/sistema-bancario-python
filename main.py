@@ -93,7 +93,7 @@ def login(clientes):
                     print(f"Seja bem vindo {nome_cliente}")
                     
                     verifica_conta_corrente(clientes= clientes, cpf_cliente= verifica_cpf)
-                    exibe_menu_cliente(clientes= clientes)
+                    exibe_menu_cliente(clientes= clientes, cpf_cliente= verifica_cpf)
                     return verifica_cpf
                 else:
                     print("CPF não encontrado! Tente novamente ou cadastre-se")
@@ -143,7 +143,7 @@ def verifica_conta_corrente(clientes, cpf_cliente):
 
 
 
-def exibe_menu_cliente(clientes):
+def exibe_menu_cliente(clientes, cpf_cliente):
  while True:
 
             opcao = input(menu)
@@ -151,7 +151,9 @@ def exibe_menu_cliente(clientes):
             if opcao.lower() == "d":
                 print("DEPÓSITO:")
                 valor_deposito = float(input("Valor do depósito: "))
-                saldo, extrato = deposito(clientes)
+                saldo, extrato = deposito(clientes= clientes, cpf_cliente= cpf_cliente, valor_deposito= valor_deposito)
+                clientes[cpf_cliente]["saldo"] = saldo
+                clientes[cpf_cliente]["extrato"] = extrato
             
             elif opcao.lower() == "s":
                 print("SAQUE:")
@@ -170,18 +172,20 @@ def exibe_menu_cliente(clientes):
             else:
                 print("Operação inválida. Selecione novamente")
 
-def deposito(saldo, extrato, valor_deposito):
+def deposito(clientes, cpf_cliente, valor_deposito):
 
     if valor_deposito > 0:
-        saldo += valor_deposito
-        extrato += f"Depósito: R${valor_deposito:.2f}\n"
+        clientes[cpf_cliente]["saldo"] += valor_deposito
+        clientes[cpf_cliente]["extrato"] += f"Depósito: R${valor_deposito:.2f}\n"
+        saldo_atual = clientes[cpf_cliente]["saldo"]
+        extrato_atual = clientes[cpf_cliente]["extrato"]
         print(f"Depósito de R${valor_deposito:.2f} realizado com sucesso!")
-        print(f"Saldo atual: R${saldo:.2f}")
+        print(f"Saldo atual: R${saldo_atual :.2f}")
     
     else: 
         print("Operação falhou! Tente novamente")
 
-    return saldo, extrato
+    return saldo_atual, extrato_atual
 
 def saque(saldo, extrato, valor_saque, numero_saques):
 
