@@ -22,7 +22,8 @@ menu = """
 
 
 clientes = {}
-LIMITE_SAQUES = 3
+LIMITE_QTD_SAQUES = 3
+LIMITE_SAQUE = 500
 
 def cadastrar_cliente(clientes):
 
@@ -158,11 +159,14 @@ def exibe_menu_cliente(clientes, cpf_cliente):
             elif opcao.lower() == "s":
                 print("SAQUE:")
                 valor_saque = float(input("Valor do saque: "))
-                numero_saques, saldo, extrato = saque(numero_saques=numero_saques, saldo=saldo, extrato=extrato, valor_saque=valor_saque)
+                numero_saques, saldo, extrato = saque(clientes= clientes, cpf_cliente= cpf_cliente, valor_saque= valor_saque)
+                clientes[cpf_cliente]["saldo"] = saldo
+                clientes[cpf_cliente]["extrato"] = extrato
+                clientes[cpf_cliente]["numero_saques"] = numero_saques
             
             elif opcao.lower() == "e":
                 print("EXTRATO:")
-                mostrar_extrato(extrato=extrato, saldo=saldo)
+                mostrar_extrato(clientes= clientes, cpf_cliente= cpf_cliente)
 
 
             elif opcao.lower() == "q":
@@ -187,13 +191,17 @@ def deposito(clientes, cpf_cliente, valor_deposito):
 
     return saldo_atual, extrato_atual
 
-def saque(saldo, extrato, valor_saque, numero_saques):
+def saque(clientes, cpf_cliente, valor_saque):
+
+    saldo = clientes[cpf_cliente]["saldo"]
+    numero_saques = clientes[cpf_cliente]["numero_saques"]
+    extrato = clientes[cpf_cliente]["extrato"]
 
     excedeu_saldo = valor_saque > saldo
 
-    excedeu_limite = valor_saque > LIMITE_SAQUES
+    excedeu_limite = valor_saque > LIMITE_SAQUE
 
-    excedeu_saques = numero_saques >= LIMITE_SAQUES
+    excedeu_saques = numero_saques >= LIMITE_QTD_SAQUES
 
     if excedeu_limite:
         print("Saque negado! O valor de saque excede o limite")
@@ -205,17 +213,24 @@ def saque(saldo, extrato, valor_saque, numero_saques):
         print("Saque negado! Você excedeu o limite de saques diário")
 
     elif valor_saque > 0:
+
             saldo -= valor_saque
             extrato += f"Saque: R${valor_saque:.2f}\n"
+            
             print(f"Saque de R${valor_saque:.2f}\n")
             print(f"Saldo atual: R${saldo:.2f}")
+
             numero_saques += 1
 
     return numero_saques, saldo, extrato
         
 
-def mostrar_extrato(extrato, saldo):
+def mostrar_extrato(clientes, cpf_cliente):
     msg = "EXTRATO"
+
+    extrato = clientes[cpf_cliente]["extrato"]
+    saldo = clientes[cpf_cliente]["saldo"]
+    
     print(msg.center(34, '='))
     if not extrato:
         print("Não foram realizadas movimentações na conta!")
